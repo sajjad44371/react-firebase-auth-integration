@@ -1,26 +1,23 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Link } from "react-router";
 import { auth } from "../../firebase/firebase.config";
+import { AuthContext } from "../../contexts/AuthContext/AuthContext";
 
 const Register = () => {
   const [terms, setTerms] = useState(false);
   const [regSuccess, setRegSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  const { createUser } = use(AuthContext);
+
   const handleRegister = (event) => {
     event.preventDefault();
-
     const email = event.target.email.value;
     const password = event.target.password.value;
     const name = event.target.name.value;
-    console.log(email, password, name);
 
-    // reset status
-    setRegSuccess(false);
-    setError("");
-
-    createUserWithEmailAndPassword(auth, email, password)
+    createUser(email, password)
       .then((result) => {
         console.log(result.user);
         setRegSuccess(true);
@@ -30,6 +27,29 @@ const Register = () => {
         setError(error.message);
       });
   };
+
+  // const handleRegister = (event) => {
+  //   event.preventDefault();
+
+  //   const email = event.target.email.value;
+  //   const password = event.target.password.value;
+  //   const name = event.target.name.value;
+  //   console.log(email, password, name);
+
+  //   // reset status
+  //   setRegSuccess(false);
+  //   setError("");
+
+  //   createUserWithEmailAndPassword(auth, email, password)
+  //     .then((result) => {
+  //       console.log(result.user);
+  //       setRegSuccess(true);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       setError(error.message);
+  //     });
+  // };
 
   return (
     <>
